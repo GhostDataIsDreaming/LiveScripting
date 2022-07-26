@@ -29,23 +29,26 @@ local startingArea = nil --You can specify a certain area or the script will get
 --[[
     Start Scripting Here
 --]]
-function isInStartingArea()
-    if (startingArea:contains(me:getTile()) == false) then
+function isInStartingAreaOrNearBank()
+    if NPCs.closest(bankers) then return true end
+
+    if not (startingArea:contains(Players:localPlayer():getTile())) then
         Walking:walk(startingArea:getRandomTile())
         return false
     end
 
     return true
+
 end
 
-function onStart()
-    if (startingArea == nil) then
-        startingArea = Players:localPlayer():getArea(maxRadius)
+script.onStart(function()
+    if not startingArea then
+        startingArea = Players:localPlayer():getTile():getArea(maxRadius)
     end
-end
+end)
 
-function onLoop()
-    if (isInStartingArea() == false) then return end
+script.onLoop(function()
+    if not (isInStartingArea()) then return end
 
     local me = Players:localPlayer()
 
@@ -53,11 +56,11 @@ function onLoop()
         MethodProvider:log("Inventory full or in Combat")
 
         local closestBankLocation = Bank:getClosestBankLocation()
-        local bankArea = closestBankLocation:getArea(maxRadius)
+        local bankArea = closestBankLocation:getArea(2)
 
         local banker = NPCs:closest(bankers)
 
-        if (banker == false) then
+        if not banker then
             Walking:walk(bankArea:getRandomTile())
         else
             if (Bank:isOpen() == false) then
@@ -86,9 +89,10 @@ function onLoop()
                     treeObject:interact("Chop down")
                     MethodProvider:sleep(500, 1000)
                 end
-            else
+            else if not (NPCs:closest(bankers)) then
                 Walking:walk(startingArea:getRandomTile())
+            end
             end
         end
     end
-end
+end)

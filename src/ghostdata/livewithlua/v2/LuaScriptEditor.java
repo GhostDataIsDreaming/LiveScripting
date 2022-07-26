@@ -91,9 +91,7 @@ public class LuaScriptEditor {
             }
 
             @Override
-            public void changedUpdate(DocumentEvent e) {
-                LiveScriptingWithLuaV2.instance().currentScript.edited = true;
-            }
+            public void changedUpdate(DocumentEvent e) { }
         });
     }
 

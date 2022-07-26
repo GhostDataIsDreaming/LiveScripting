@@ -77,6 +77,7 @@
             </constraints>
             <properties>
               <text value="Show Recent Error in Editor"/>
+              <visible value="false"/>
             </properties>
           </component>
           <component id="f6c21" class="javax.swing.JRadioButton" binding="printErrorInConsoleRadioButton" default-binding="true">

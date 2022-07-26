@@ -15,6 +15,9 @@ public class SettingsGUI {
     public JPanel rootPanel;
 
     public SettingsGUI() {
+        showRecentErrorInRadioButton.setSelected(true);
+        printErrorInConsoleRadioButton.setSelected(true);
+
         executingIntervalTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent event) {

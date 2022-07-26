@@ -1,5 +1,6 @@
 package ghostdata.livewithlua.v2.environment.script;
 
+import org.dreambot.api.methods.MethodProvider;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.VarArgFunction;
