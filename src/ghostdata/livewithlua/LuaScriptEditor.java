@@ -1,18 +1,12 @@
-package ghostdata.livewithlua.v2;
+package ghostdata.livewithlua;
 
-import ghostdata.livewithlua.v2.environment.script.LiveScript;
+import ghostdata.livewithlua.environment.script.LiveScript;
 import org.dreambot.api.methods.MethodProvider;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.JTextComponent;
-import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeListener;
-import java.util.HashMap;
 
 public class LuaScriptEditor {
     public JPanel recentErrorPanel;

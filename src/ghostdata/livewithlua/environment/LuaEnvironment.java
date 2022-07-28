@@ -1,7 +1,7 @@
-package ghostdata.livewithlua.v2.environment;
+package ghostdata.livewithlua.environment;
 
-import ghostdata.livewithlua.v2.environment.script.LiveScript;
-import ghostdata.livewithlua.v2.environment.script.ScriptWrapper;
+import ghostdata.livewithlua.environment.script.LiveScript;
+import ghostdata.livewithlua.environment.script.ScriptWrapper;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;

@@ -1,7 +1,6 @@
-package ghostdata.livewithlua.v2;
+package ghostdata.livewithlua;
 
-import ghostdata.livewithlua.v2.environment.script.LiveScript;
-import org.apache.tools.ant.types.Resource;
+import ghostdata.livewithlua.environment.script.LiveScript;
 import org.dreambot.api.methods.MethodProvider;
 
 import javax.swing.*;
@@ -11,15 +10,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 

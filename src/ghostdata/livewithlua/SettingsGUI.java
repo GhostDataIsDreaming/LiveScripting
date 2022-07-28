@@ -1,4 +1,4 @@
-package ghostdata.livewithlua.v2;
+package ghostdata.livewithlua;
 
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
@@ -10,7 +10,6 @@ public class SettingsGUI {
     public JTextField executingIntervalTextField;
     public JRadioButton showRecentErrorInRadioButton;
     public JRadioButton printErrorInConsoleRadioButton;
-    private JList plannedAdditionsList;
     public  JRadioButton highlightErrorLineRadioButton;
     public JPanel rootPanel;
 

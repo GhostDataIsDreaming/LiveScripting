@@ -1,21 +1,14 @@
-package ghostdata.livewithlua.v2.environment.script;
+package ghostdata.livewithlua.environment.script;
 
-import ghostdata.livewithlua.v2.LiveScriptingWithLuaV2;
-import ghostdata.livewithlua.v2.environment.LuaEnvironment;
+import ghostdata.livewithlua.LiveScriptingWithLuaV2;
+import ghostdata.livewithlua.environment.LuaEnvironment;
 import org.dreambot.api.methods.MethodProvider;
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.LuaFunction;
-import org.luaj.vm2.LuaValue;
 
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class LiveScript extends ScriptObjHandler {
 

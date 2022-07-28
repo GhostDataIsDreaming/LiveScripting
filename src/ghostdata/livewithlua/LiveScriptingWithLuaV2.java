@@ -1,6 +1,6 @@
-package ghostdata.livewithlua.v2;
+package ghostdata.livewithlua;
 
-import ghostdata.livewithlua.v2.environment.script.LiveScript;
+import ghostdata.livewithlua.environment.script.LiveScript;
 import org.dreambot.api.methods.MethodProvider;
 import org.dreambot.api.script.AbstractScript;
 import org.dreambot.api.script.Category;
