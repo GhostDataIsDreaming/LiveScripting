@@ -127,6 +127,5 @@ public class LiveScript extends ScriptObjHandler {
 
     public void setEdited(boolean edited) {
         this.edited = edited;
-        MethodProvider.log("Set Edited = " + edited);
     }
 }

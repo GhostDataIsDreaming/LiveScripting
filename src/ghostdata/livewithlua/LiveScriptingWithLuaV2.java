@@ -125,8 +125,6 @@ public class LiveScriptingWithLuaV2 extends AbstractScript {
             }
 
             // Run Script
-            MethodProvider.log(currentScript);
-
             if (!currentScript.started) {
                 currentScript.onStart();
             }

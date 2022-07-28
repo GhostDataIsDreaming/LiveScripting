@@ -28,7 +28,6 @@ abstract class ScriptObjHandler {
     abstract void reload(boolean load);
 
     public void onStart() {
-        MethodProvider.log("Live:onStart");
         if (onStart != null) {
             onStart.call();
             started = true;
@@ -37,7 +36,6 @@ abstract class ScriptObjHandler {
 
 
     public Object onLoop() {
-        MethodProvider.log("Live:onLoop");
         if (onLoop != null) {
             return LuaEnvironment.getObjectFromLuavalue(onLoop.call());
         } else {
