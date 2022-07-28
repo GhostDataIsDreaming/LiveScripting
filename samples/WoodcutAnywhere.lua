@@ -22,7 +22,7 @@ local Calculations = luajava.bindClass("org.dreambot.api.methods.Calculations")
 --]]
 local bankers = { "Banker" }
 local maxRadius = 10; -- Max Travel distance around starting tile
-local trees = { "Tree", "Oak Tree", "Willow" } -- Trees to Cut Down
+local trees = { "Tree", "Oak", "Willow" } -- Trees to Cut Down
 local logs = { "Logs", "Oak logs", "Willow logs" } -- Logs to deposit in bank
 
 --[[
