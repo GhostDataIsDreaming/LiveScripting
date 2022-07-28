@@ -13,7 +13,7 @@ import java.awt.*;
         name = "Live Scripting w/ Lua",
         description = "Script Live directly in DreamBot w/ Lua",
         author = "GhostData",
-        version = 2.0,
+        version = 2.1,
         category = Category.MISC
 )
 public class LiveScriptingWithLuaV2 extends AbstractScript {
