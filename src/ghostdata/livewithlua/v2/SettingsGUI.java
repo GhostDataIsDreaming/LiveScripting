@@ -16,6 +16,7 @@ public class SettingsGUI {
 
     public SettingsGUI() {
         showRecentErrorInRadioButton.setSelected(true);
+        highlightErrorLineRadioButton.setSelected(true);
         printErrorInConsoleRadioButton.setSelected(true);
 
         executingIntervalTextField.addKeyListener(new KeyAdapter() {

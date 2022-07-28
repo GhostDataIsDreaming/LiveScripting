@@ -18,14 +18,12 @@ public class LuaScriptEditor {
     public JPanel recentErrorPanel;
     public JTextField recentErrorTextField;
     private JButton openSettingsButton;
-    private JScrollPane luaEditorScrollPane;
     protected JTextPane luaEditorTextPane;
     protected JPanel rootPanel;
-    private JPanel topPanel;
     private JButton changeFileButton;
     private JButton saveButton;
 
-    private static HashMap<JTextComponent, DefaultHighlighter.DefaultHighlightPainter> HIGHLIGHTERS = new HashMap<>();
+//    private static HashMap<JTextComponent, DefaultHighlighter.DefaultHighlightPainter> HIGHLIGHTERS = new HashMap<>();
 
     public LuaScriptEditor() {
         luaEditorTextPane.setText(LiveScriptingWithLuaV2.instance().currentScript.getLinesAsString());
@@ -60,34 +58,16 @@ public class LuaScriptEditor {
                 LiveScriptingWithLuaV2.instance()._settingsFrame.setVisible(true);
             }
         });
-//        luaEditorTextPane.addKeyListener(new KeyAdapter() {
-//            @Override
-//            public void keyTyped(KeyEvent e) {
-//                LiveScriptingWithLuaV2.instance().currentScript.edited = true;
-//                super.keyTyped(e);
-//            }
-//
-//            @Override
-//            public void keyPressed(KeyEvent e) {
-//                LiveScriptingWithLuaV2.instance().currentScript.edited = true;
-//                super.keyPressed(e);
-//            }
-//
-//            @Override
-//            public void keyReleased(KeyEvent e) {
-//                LiveScriptingWithLuaV2.instance().currentScript.edited = true;
-//                super.keyReleased(e);
-//            }
-//        });
+
         luaEditorTextPane.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                LiveScriptingWithLuaV2.instance().currentScript.edited = true;
+                LiveScriptingWithLuaV2.instance().currentScript.setEdited(true);
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                LiveScriptingWithLuaV2.instance().currentScript.edited = true;
+                LiveScriptingWithLuaV2.instance().currentScript.setEdited(true);
             }
 
             @Override
@@ -95,18 +75,18 @@ public class LuaScriptEditor {
         });
     }
 
-    public static void highlightLine(JTextComponent textComponent, int lineNumber, Color color) throws BadLocationException {
-        int startIndex = textComponent.getDocument().getDefaultRootElement().getElement(lineNumber).getStartOffset();
-        int endIndex = textComponent.getDocument().getDefaultRootElement().getElement(lineNumber).getEndOffset();
-
-        DefaultHighlighter.DefaultHighlightPainter highlighter = HIGHLIGHTERS.getOrDefault(textComponent, new DefaultHighlighter.DefaultHighlightPainter(color));
-
-        if (textComponent.getHighlighter().getHighlights().length == 0) {
-            textComponent.getHighlighter().addHighlight(startIndex, endIndex, highlighter);
-        } else {
-            textComponent.getHighlighter().changeHighlight(highlighter, startIndex, endIndex);
-        }
-
-        HIGHLIGHTERS.put(textComponent, highlighter);
-    }
+//    public static void highlightLine(JTextComponent textComponent, int lineNumber, Color color) throws BadLocationException {
+//        int startIndex = textComponent.getDocument().getDefaultRootElement().getElement(lineNumber).getStartOffset();
+//        int endIndex = textComponent.getDocument().getDefaultRootElement().getElement(lineNumber).getEndOffset();
+//
+//        DefaultHighlighter.DefaultHighlightPainter highlighter = HIGHLIGHTERS.getOrDefault(textComponent, new DefaultHighlighter.DefaultHighlightPainter(color));
+//
+//        if (textComponent.getHighlighter().getHighlights().length == 0) {
+//            textComponent.getHighlighter().addHighlight(startIndex, endIndex, highlighter);
+//        } else {
+//            textComponent.getHighlighter().changeHighlight(highlighter, startIndex, endIndex);
+//        }
+//
+//        HIGHLIGHTERS.put(textComponent, highlighter);
+//    }
 }

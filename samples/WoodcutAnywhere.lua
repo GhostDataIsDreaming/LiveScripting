@@ -67,10 +67,10 @@ script.onLoop(function()
     local min = Calculations:random(100, 1000)
     local max = Calculations:random(1001, 5000)
 
-    MethodProvider:log("Waiting between " .. min .. " and " .. max);
-    MethodProvider:log("Inventory Full: " .. tostring(Inventory:isFull()));
-    MethodProvider:log("Is at Bank (" .. bankLocation:name() .. ")? " .. tostring(isAtBank()));
-    MethodProvider:log("Is at Starting Area? " .. tostring(isAtStartingArea()));
+    --MethodProvider:log("Waiting between " .. min .. " and " .. max);
+    --MethodProvider:log("Inventory Full: " .. tostring(Inventory:isFull()));
+    --MethodProvider:log("Is at Bank (" .. bankLocation:name() .. ")? " .. tostring(isAtBank()));
+    --MethodProvider:log("Is at Starting Area? " .. tostring(isAtStartingArea()));
 
     if Inventory:isFull() then
         if (isAtBank()) then
@@ -88,18 +88,18 @@ script.onLoop(function()
 
             Bank:close()
         else
-            MethodProvider:log("Walking to Bank Area");
+            --MethodProvider:log("Walking to Bank Area");
             Walking:walk(bankArea:getRandomTile())
         end
     else if isAtStartingArea() then
         local me = Players:localPlayer()
 
-        MethodProvider:log("Is Interacted With? " .. tostring(me:isInteractedWith()));
-        MethodProvider:log("Is Animating? " .. tostring(me:isAnimating()));
-        MethodProvider:log("Animating = " .. tostring(me:getAnimation()));
+        --MethodProvider:log("Is Interacted With? " .. tostring(me:isInteractedWith()));
+        --MethodProvider:log("Is Animating? " .. tostring(me:isAnimating()));
+        --MethodProvider:log("Animating = " .. tostring(me:getAnimation()));
 
         if me:getAnimation() == -1 then
-            MethodProvider:log("Pick Tree");
+            --MethodProvider:log("Pick Tree");
             local treeObject = GameObjects:closest(trees)
 
             if (treeObject) then
@@ -107,7 +107,7 @@ script.onLoop(function()
             end
         end
     else
-        MethodProvider:log("Walking to Starting Area");
+        --MethodProvider:log("Walking to Starting Area");
         Walking:walk(startingArea:getRandomTile())
     end
     end

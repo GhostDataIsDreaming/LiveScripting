@@ -1,6 +1,7 @@
 package ghostdata.livewithlua.v2.environment.script;
 
 import ghostdata.livewithlua.v2.environment.LuaEnvironment;
+import org.dreambot.api.methods.MethodProvider;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.Lua;
 import org.luaj.vm2.LuaFunction;
@@ -21,14 +22,15 @@ abstract class ScriptObjHandler {
     LuaFunction onResume;
     LuaFunction onPaint;
 
-    public boolean started;
+    public boolean started = false;
 
     abstract void load();
 
     abstract void reload(boolean load);
 
     public void onStart() {
-        if (onStart != null && !started) {
+        MethodProvider.log("Live:onStart");
+        if (onStart != null) {
             onStart.call();
             started = true;
         }
@@ -36,6 +38,7 @@ abstract class ScriptObjHandler {
 
 
     public Object onLoop() {
+        MethodProvider.log("Live:onLoop");
         if (onLoop != null) {
             return LuaEnvironment.getObjectFromLuavalue(onLoop.call());
         } else {
@@ -67,5 +70,18 @@ abstract class ScriptObjHandler {
         if (onPaint != null) {
             onPaint.call(CoerceJavaToLua.coerce(graphics));
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ScriptObjHandler{" +
+                "started=" + started +
+                ", onStart=" + (onStart != null) +
+                ", onLoop=" + (onLoop != null) +
+                ", onExit=" + (onExit != null) +
+                ", onPause=" + (onPause != null) +
+                ", onResume=" + (onResume != null) +
+                ", onPaint=" + (onPaint != null) +
+                '}';
     }
 }

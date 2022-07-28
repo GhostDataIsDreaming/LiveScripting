@@ -4,16 +4,19 @@ import ghostdata.livewithlua.v2.environment.script.LiveScript;
 import org.dreambot.api.methods.MethodProvider;
 import org.dreambot.api.script.AbstractScript;
 import org.dreambot.api.script.Category;
+import org.dreambot.api.script.ScriptManager;
 import org.dreambot.api.script.ScriptManifest;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 @ScriptManifest(
         name = "Live Scripting w/ Lua",
         description = "Script Live directly in DreamBot w/ Lua",
         author = "GhostData",
-        version = 2.1,
+        version = 2.2,
         category = Category.MISC
 )
 public class LiveScriptingWithLuaV2 extends AbstractScript {
@@ -57,9 +60,42 @@ public class LiveScriptingWithLuaV2 extends AbstractScript {
             _editorFrame.pack();
             _settingsFrame.pack();
 
+            _editorFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
             _settingsFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
             _loadFrame.setVisible(true);
+
+            _loadFrame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    ScriptManager.getScriptManager().stop();
+                }
+            });
+            _editorFrame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                if (JOptionPane.showConfirmDialog(_editorFrame,
+                        "Stop Script & Choose Another?\nMake sure to save your script.",
+                        "Editor Closing Warning",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+                    _loadFrame.setVisible(true);
+                    _editorFrame.setVisible(false);
+                    _settingsFrame.setVisible(false);
+                    instance().ready = false;
+                } else {
+                    SwingUtilities.invokeLater(() ->{
+                        _editorFrame.setVisible(true);
+                    });
+                }
+                }
+            });
+            _settingsFrame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                _settingsFrame.setVisible(false);
+                }
+            });
         });
     }
 
@@ -71,27 +107,30 @@ public class LiveScriptingWithLuaV2 extends AbstractScript {
         int nextInterval = Integer.valueOf(settingsGUI.executingIntervalTextField.getText());
 //        boolean showRecentError = settingsGUI.showRecentErrorInRadioButton.isSelected();
         boolean showFullError = settingsGUI.printErrorInConsoleRadioButton.isSelected();
-        boolean highlightErrorLine = settingsGUI.highlightErrorLineRadioButton.isSelected();
+//        boolean highlightErrorLine = settingsGUI.highlightErrorLineRadioButton.isSelected();
         // End Poll
 
         //Apply Settings
 //        luaScriptEditor.recentErrorPanel.setVisible(showRecentError);
 
         Throwable error = null;
-
-        // Check for Changes - If any load them and wait till next onLoop
-        if (currentScript.edited) {
-            currentScript.setContent(luaScriptEditor.luaEditorTextPane.getText(), true, false);
-//            currentScript.reloadScript(true);
-            currentScript.started = false;
-            currentScript.edited = false;
-
-            return 1000;
-        }
-
-        // Run Script
         try {
-            currentScript.onStart();
+            // Check for Changes - If any load them and wait till next onLoop
+            if (currentScript.edited) {
+                currentScript.setContent(luaScriptEditor.luaEditorTextPane.getText(), true, false);
+                currentScript.started = false;
+                currentScript.setEdited(false);
+
+                return 1000;
+            }
+
+            // Run Script
+            MethodProvider.log(currentScript);
+
+            if (!currentScript.started) {
+                currentScript.onStart();
+            }
+
             Object value = currentScript.onLoop();
 
             if (value != null) {
@@ -112,20 +151,19 @@ public class LiveScriptingWithLuaV2 extends AbstractScript {
 
             luaScriptEditor.recentErrorTextField.setText(error.getMessage());
 
-            if (highlightErrorLine) {
-                //Attempt to parse simple message to find the error line
-                String message = error.getMessage();
-                String lineNumberStr = message.split(":")[1];
-//                System.out.println("Detected Line number: " + lineNumberStr);
-                int lineNumber = Integer.valueOf(lineNumberStr);
-
-                try {
-                    LuaScriptEditor.highlightLine(luaScriptEditor.luaEditorTextPane, lineNumber, Color.RED);
-                } catch (Exception e) {
-                    MethodProvider.logError(e);
-                    throw new RuntimeException(e);
-                }
-            }
+//            if (highlightErrorLine) {
+//                //Attempt to parse simple message to find the error line
+//                String message = error.getMessage();
+//                String lineNumberStr = message.split(":")[1];
+//
+//                try {
+//                    int lineNumber = Integer.valueOf(lineNumberStr);
+//                    MethodProvider.log("Detected Line number: " + lineNumberStr);
+//                    LuaScriptEditor.highlightLine(luaScriptEditor.luaEditorTextPane, lineNumber, Color.RED);
+//                } catch (Exception e) {
+//                    MethodProvider.logError(e);
+//                }
+//            }
         }
 
         return nextInterval;
@@ -133,6 +171,10 @@ public class LiveScriptingWithLuaV2 extends AbstractScript {
 
     @Override
     public void onExit() {
+        _editorFrame.setVisible(false);
+        _loadFrame.setVisible(false);
+        _settingsFrame.setVisible(false);
+
         if (!ready || currentScript == null) return;
         currentScript.onExit();
     }

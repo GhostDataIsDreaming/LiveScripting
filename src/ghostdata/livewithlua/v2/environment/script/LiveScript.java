@@ -81,6 +81,7 @@ public class LiveScript extends ScriptObjHandler {
 
     @Override
     public void reload(boolean load) {
+        this.globals = LuaEnvironment.getNewGlobals(this);
         this.script = globals.load(getLinesAsString(), file.getName());
 
         if (load) {
@@ -90,9 +91,6 @@ public class LiveScript extends ScriptObjHandler {
 
     public void load() {
         script.call();
-
-        MethodProvider.log("Found Script:" + file.getName() + ":onStart? " + (onStart != null));
-        MethodProvider.log("Found Script:" + file.getName() + ":onLoopt? " + (onLoop != null));
     }
 
     public void save() throws IOException {
@@ -132,5 +130,10 @@ public class LiveScript extends ScriptObjHandler {
         luaScriptFile.setContent(content.toString(), true, false);
 
         return luaScriptFile;
+    }
+
+    public void setEdited(boolean edited) {
+        this.edited = edited;
+        MethodProvider.log("Set Edited = " + edited);
     }
 }
