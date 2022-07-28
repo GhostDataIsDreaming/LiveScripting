@@ -39,6 +39,7 @@ public class LoadLuaScriptGUI {
                 LiveScriptingWithLuaV2.instance()._editorFrame.setVisible(true);
                 LiveScriptingWithLuaV2.instance()._loadFrame.setVisible(false);
 
+                LiveScriptingWithLuaV2.instance().currentScript.load();
                 LiveScriptingWithLuaV2.instance().luaScriptEditor.luaEditorTextPane.setText(LiveScriptingWithLuaV2.instance().currentScript.getLinesAsString());
                 LiveScriptingWithLuaV2.instance().ready = true;
             }

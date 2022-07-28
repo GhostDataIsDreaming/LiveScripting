@@ -24,7 +24,7 @@ public class LiveScriptingWithLuaV2 extends AbstractScript {
     public LuaScriptEditor luaScriptEditor;
     public SettingsGUI settingsGUI;
 
-    public LiveScript currentScript = new LiveScript().call();
+    public LiveScript currentScript = new LiveScript();
 
     public JFrame _loadFrame;
     public JFrame _editorFrame;
@@ -129,5 +129,29 @@ public class LiveScriptingWithLuaV2 extends AbstractScript {
         }
 
         return nextInterval;
+    }
+
+    @Override
+    public void onExit() {
+        if (!ready || currentScript == null) return;
+        currentScript.onExit();
+    }
+
+    @Override
+    public void onPause() {
+        if (!ready || currentScript == null) return;
+        currentScript.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        if (!ready || currentScript == null) return;
+        currentScript.onResume();
+    }
+
+    @Override
+    public void onPaint(Graphics graphics) {
+        if (!ready || currentScript == null) return;
+        currentScript.onPaint(graphics);
     }
 }

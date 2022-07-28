@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class LiveScript {
+public class LiveScript extends ScriptObjHandler {
 
     protected static String[] DEFAULT_SCRIPT = {
         "local MethodProvider = luajava.bindClass(\"org.dreambot.api.methods.MethodProvider\")\n",
@@ -33,11 +33,6 @@ public class LiveScript {
         "   MethodProvider:log(\"onLoop\")\n",
         "end)\n",
     };
-
-    public Globals globals;
-    public LuaValue main;
-    public LuaFunction onStart;
-    public LuaFunction onLoop;
 
     public boolean edited = false;
     public boolean started = false;
@@ -69,7 +64,7 @@ public class LiveScript {
         setContent(content, false, false);
     }
 
-    public void setContent(String content, boolean call, boolean save) {
+    public void setContent(String content, boolean load, boolean save) {
         this.lines = content;
 
         if (save) {
@@ -81,38 +76,23 @@ public class LiveScript {
             }
         }
 
-        reloadScript(call);
+        reload(load);
     }
 
-    public void reloadScript(boolean call) {
-        this.main = globals.load(getLinesAsString(), file.getName());
+    @Override
+    public void reload(boolean load) {
+        this.script = globals.load(getLinesAsString(), file.getName());
 
-        if (call) {
-            call();
+        if (load) {
+            load();
         }
     }
 
-    public LiveScript call() {
-        main.call();
+    public void load() {
+        script.call();
 
         MethodProvider.log("Found Script:" + file.getName() + ":onStart? " + (onStart != null));
         MethodProvider.log("Found Script:" + file.getName() + ":onLoopt? " + (onLoop != null));
-        return this;
-    }
-
-    public void onStart() {
-        if (onStart != null && !started) {
-            onStart.call();
-            started = true;
-        }
-    }
-
-    public Object onLoop() {
-        if (onLoop != null) {
-            return LuaEnvironment.getObjectFromLuavalue(onLoop.call());
-        }
-
-        return null;
     }
 
     public void save() throws IOException {
@@ -148,7 +128,7 @@ public class LiveScript {
         LiveScript luaScriptFile = new LiveScript();
         luaScriptFile.file = chosen;
         StringBuilder content = new StringBuilder();
-        Files.lines(chosen.toPath()).forEach(content::append);
+        Files.lines(chosen.toPath()).forEach((line) -> content.append(line + "\n"));
         luaScriptFile.setContent(content.toString(), true, false);
 
         return luaScriptFile;
