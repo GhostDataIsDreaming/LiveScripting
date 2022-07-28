@@ -22,10 +22,35 @@ abstract class ScriptObjHandler {
     LuaFunction onPaint;
 
     public boolean started = false;
+    public boolean killed = false;
 
     abstract void load();
 
     abstract void reload(boolean load);
+
+    public void setOnStart(LuaFunction onStart) {
+        this.onStart = onStart;
+    }
+
+    public void setOnLoop(LuaFunction onLoop) {
+        this.onLoop = onLoop;
+    }
+
+    public void setOnExit(LuaFunction onExit) {
+        this.onExit = onExit;
+    }
+
+    public void setOnPause(LuaFunction onPause) {
+        this.onPause = onPause;
+    }
+
+    public void setOnResume(LuaFunction onResume) {
+        this.onResume = onResume;
+    }
+
+    public void setOnPaint(LuaFunction onPaint) {
+        this.onPaint = onPaint;
+    }
 
     public void onStart() {
         if (onStart != null) {

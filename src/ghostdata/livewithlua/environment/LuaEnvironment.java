@@ -1,7 +1,8 @@
 package ghostdata.livewithlua.environment;
 
 import ghostdata.livewithlua.environment.script.LiveScript;
-import ghostdata.livewithlua.environment.script.ScriptWrapper;
+import ghostdata.livewithlua.environment.wrappers.GUIWrapper;
+import ghostdata.livewithlua.environment.wrappers.ScriptWrapper;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
@@ -19,7 +20,10 @@ public class LuaEnvironment {
         Globals globals = JsePlatform.standardGlobals();
 
         globals.set("__livescripts__", new LuaTable());
+
         globals.set("script", new ScriptWrapper(script));
+        globals.set("gui", new GUIWrapper(script));
+
         globals.set("import", new OneArgFunction() {
             @Override
             public LuaValue call(LuaValue arg) {

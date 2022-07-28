@@ -39,7 +39,10 @@ public class LuaScriptEditor {
                 try {
                     LiveScript scriptFile = LiveScript.loadFileWithFileChooser();
                     LiveScriptingWithLuaV2.instance().currentScript = scriptFile;
-                    LiveScriptingWithLuaV2.instance().luaScriptEditor.luaEditorTextPane.setText(LiveScriptingWithLuaV2.instance().currentScript.getLinesAsString());
+                    LiveScriptingWithLuaV2.instance().luaScriptEditor.luaEditorTextPane.setText(scriptFile.getLinesAsString());
+
+                    scriptFile.load();
+                    scriptFile.setEdited(true);
                 } catch (Exception e) {
                     new RuntimeException(e);
                 }

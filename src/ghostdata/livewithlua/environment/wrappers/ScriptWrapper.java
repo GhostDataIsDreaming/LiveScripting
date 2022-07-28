@@ -1,5 +1,7 @@
-package ghostdata.livewithlua.environment.script;
+package ghostdata.livewithlua.environment.wrappers;
 
+import ghostdata.livewithlua.environment.script.LiveScript;
+import org.dreambot.api.script.ScriptManager;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.OneArgFunction;
@@ -11,11 +13,28 @@ public class ScriptWrapper extends LuaTable {
     public ScriptWrapper(LiveScript script) {
         this.script = script;
 
+        set("kill", new VarArgFunction() {
+            @Override
+            public LuaValue call(LuaValue arg) {
+                script.killed = true;
+
+                return LuaValue.NIL;
+            }
+        });
+
+        set("stop", new VarArgFunction() {
+            @Override
+            public LuaValue call(LuaValue arg) {
+                ScriptManager.getScriptManager().stop();
+                return LuaValue.NIL;
+            }
+        });
+
         set("onStart", new VarArgFunction() {
             @Override
             public LuaValue call(LuaValue arg) {
                 if (arg.isfunction()) {
-                    script.onStart = arg.checkfunction();
+                    script.setOnStart(arg.checkfunction());
                 } else {
                     throw new RuntimeException("onStart does not contain function");
                 }
@@ -28,7 +47,7 @@ public class ScriptWrapper extends LuaTable {
             @Override
             public LuaValue call(LuaValue arg) {
                 if (arg.isfunction()) {
-                    script.onLoop = arg.checkfunction();
+                    script.setOnLoop(arg.checkfunction());
                 } else {
                     throw new RuntimeException("onStart does not contain function");
                 }
@@ -41,7 +60,7 @@ public class ScriptWrapper extends LuaTable {
             @Override
             public LuaValue call(LuaValue arg) {
                 if (arg.isfunction()) {
-                    script.onExit = arg.checkfunction();
+                    script.setOnExit(arg.checkfunction());
                 } else {
                     throw new RuntimeException("onStart does not contain function");
                 }
@@ -54,7 +73,7 @@ public class ScriptWrapper extends LuaTable {
             @Override
             public LuaValue call(LuaValue arg) {
                 if (arg.isfunction()) {
-                    script.onExit = arg.checkfunction();
+                    script.setOnPause(arg.checkfunction());
                 } else {
                     throw new RuntimeException("onStart does not contain function");
                 }
@@ -67,7 +86,7 @@ public class ScriptWrapper extends LuaTable {
             @Override
             public LuaValue call(LuaValue arg) {
                 if (arg.isfunction()) {
-                    script.onResume = arg.checkfunction();
+                    script.setOnResume(arg.checkfunction());
                 } else {
                     throw new RuntimeException("onStart does not contain function");
                 }
@@ -80,7 +99,7 @@ public class ScriptWrapper extends LuaTable {
             @Override
             public LuaValue call(LuaValue arg) {
                 if (arg.isfunction()) {
-                    script.onPaint = arg.checkfunction();
+                    script.setOnPaint(arg.checkfunction());
                 } else {
                     throw new RuntimeException("onStart does not contain function");
                 }

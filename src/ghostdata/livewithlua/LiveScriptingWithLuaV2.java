@@ -115,6 +115,8 @@ public class LiveScriptingWithLuaV2 extends AbstractScript {
 
         Throwable error = null;
         try {
+            if (currentScript.killed) return 1000; // Never Run Script again
+
             // Check for Changes - If any load them and wait till next onLoop
             if (currentScript.edited) {
                 currentScript.setContent(luaScriptEditor.luaEditorTextPane.getText(), true, false);
