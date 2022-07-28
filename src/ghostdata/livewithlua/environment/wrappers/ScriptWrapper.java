@@ -6,6 +6,7 @@ import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.OneArgFunction;
 import org.luaj.vm2.lib.VarArgFunction;
+import org.luaj.vm2.lib.ZeroArgFunction;
 
 public class ScriptWrapper extends LuaTable {
     private LiveScript script;
@@ -13,18 +14,18 @@ public class ScriptWrapper extends LuaTable {
     public ScriptWrapper(LiveScript script) {
         this.script = script;
 
-        set("kill", new VarArgFunction() {
+        set("kill", new ZeroArgFunction() {
             @Override
-            public LuaValue call(LuaValue arg) {
+            public LuaValue call() {
                 script.killed = true;
 
                 return LuaValue.NIL;
             }
         });
 
-        set("stop", new VarArgFunction() {
+        set("stop", new ZeroArgFunction() {
             @Override
-            public LuaValue call(LuaValue arg) {
+            public LuaValue call() {
                 ScriptManager.getScriptManager().stop();
                 return LuaValue.NIL;
             }
