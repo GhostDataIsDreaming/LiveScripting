@@ -15,6 +15,7 @@ local NPCs = luajava.bindClass("org.dreambot.api.methods.interactive.NPCs")
 local Inventory = luajava.bindClass("org.dreambot.api.methods.container.impl.Inventory")
 local Bank = luajava.bindClass("org.dreambot.api.methods.container.impl.bank.Bank")
 local GameObjects = luajava.bindClass("org.dreambot.api.methods.interactive.GameObjects")
+local Calculations = luajava.bindClass("org.dreambot.api.methods.Calculations")
 
 --[[
     Lets setup Main Variables to adjust script
@@ -24,46 +25,58 @@ local maxRadius = 10; -- Max Travel distance around starting tile
 local trees = { "Tree", "Oak Tree", "Willow" } -- Trees to Cut Down
 local logs = { "Log", "Oak logs", "Willow logs" } -- Logs to deposit in bank
 
-local startingArea = nil --You can specify a certain area or the script will get it onStart
+--[[
+    Variables for script, Do not modify. Script uses them
+--]]
+local startingArea = nil
+local bankLocation = nil
+local bankArea = nil
 
 --[[
-    Start Scripting Here
+    Define functions script can use
 --]]
-function isInStartingAreaOrNearBank()
-    if NPCs.closest(bankers) then return true end
-
-    if not (startingArea:contains(Players:localPlayer():getTile())) then
-        Walking:walk(startingArea:getRandomTile())
-        return false
+function isAtBank()
+    if not bankLocation or not bankArea then
+        bankLocation = Bank:getClosestBankLocation()
+        bankArea = bankLocation:getArea(2)
     end
 
+    if not NPCs:closest(bankers) then return false end
     return true
-
 end
 
-script.onStart(function()
+function isAtStartingArea()
     if not startingArea then
         startingArea = Players:localPlayer():getTile():getArea(maxRadius)
     end
+
+    if not startingArea:contains(Players:localPlayer():getTile()) then return false end
+    return true
+end
+
+--[[
+    Actual Script
+--]]
+script.onStart(function()
+    -- Grab Variables onStart
+    isAtStartingArea()
+    isAtBank()
 end)
 
 script.onLoop(function()
-    if not (isInStartingArea()) then return end
+    local min = Calculations:random(100, 1000)
+    local max = Calculations:random(1001, 5000)
 
-    local me = Players:localPlayer()
+    MethodProvider:log("Waiting between " .. min .. " and " .. max);
+    MethodProvider:log("Inventory Full: " .. tostring(Inventory:isFull()));
+    MethodProvider:log("Is at Bank (" .. bankLocation:name() .. ")? " .. tostring(isAtBank()));
+    MethodProvider:log("Is at Starting Area? " .. tostring(isAtStartingArea()));
 
-    if (Inventory:isFull() or me:isInCombat()) then
-        MethodProvider:log("Inventory full or in Combat")
+    if Inventory:isFull() then
+        if (isAtBank()) then
+            local banker = NPCs:closest(trees)
 
-        local closestBankLocation = Bank:getClosestBankLocation()
-        local bankArea = closestBankLocation:getArea(2)
-
-        local banker = NPCs:closest(bankers)
-
-        if not banker then
-            Walking:walk(bankArea:getRandomTile())
-        else
-            if (Bank:isOpen() == false) then
+            if not Bank:isOpen() then
                 Bank:open()
                 MethodProvider:sleep(100, 1000)
             end
@@ -74,25 +87,30 @@ script.onLoop(function()
             end
 
             Bank:close()
+        else
+            MethodProvider:log("Walking to Bank Area");
+            Walking:walk(bankArea:getRandomTile())
+        end
+    else if isAtStartingArea() then
+        local me = Players:localPlayer()
+
+        MethodProvider:log("Is Interacted With? " .. tostring(me:isInteractedWith()));
+        MethodProvider:log("Is Animating? " .. tostring(me:isAnimating()));
+        MethodProvider:log("Animating = " .. tostring(me:getAnimation()));
+
+        if me:getAnimation() == -1 then
+            MethodProvider:log("Pick Tree");
+            local treeObject = GameObjects:closest(trees)
+
+            if (treeObject) then
+                treeObject:interact("Chop down")
+            end
         end
     else
-        MethodProvider:log("Inventory not full or in combat")
-
-        if (me:isInteractedWith() or me:isAnimating()) then
-            -- Do nothing if we are chopping or animating ?? asuming this fires if you are currently
-            -- chopping
-        else
-            if (startingArea:contains(me:getTile())) then
-                local treeObject = GameObjects:closest(trees)
-
-                if (treeObject) then -- Only run if a tree is found
-                    treeObject:interact("Chop down")
-                    MethodProvider:sleep(500, 1000)
-                end
-            else if not (NPCs:closest(bankers)) then
-                Walking:walk(startingArea:getRandomTile())
-            end
-            end
-        end
+        MethodProvider:log("Walking to Starting Area");
+        Walking:walk(startingArea:getRandomTile())
     end
+    end
+
+    return Calculations:random(min, max)
 end)

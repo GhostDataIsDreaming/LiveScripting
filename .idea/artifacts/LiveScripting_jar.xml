@@ -4,6 +4,9 @@
     <root id="archive" name="LiveScripting.jar">
       <element id="module-output" name="LiveScripting" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/luaj-jse-3.0.1.jar" path-in-jar="/" />
+      <element id="directory" name="samples">
+        <element id="dir-copy" path="$PROJECT_DIR$/samples" />
+      </element>
     </root>
   </artifact>
 </component>
