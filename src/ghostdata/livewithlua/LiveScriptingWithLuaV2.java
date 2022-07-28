@@ -16,7 +16,7 @@ import java.awt.event.WindowEvent;
         name = "Live Scripting w/ Lua",
         description = "Script Live directly in DreamBot w/ Lua",
         author = "GhostData",
-        version = 2.2,
+        version = 2.3,
         category = Category.MISC
 )
 public class LiveScriptingWithLuaV2 extends AbstractScript {
