@@ -13,10 +13,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 @ScriptManifest(
-        name = "Live Scripting w/ Lua",
-        description = "Script Live directly in DreamBot w/ Lua",
+        name = "Live Scripting",
+        description = "Write and edit scripts live while your bot is running.",
         author = "GhostData",
-        version = 2.3,
+        version = 2.4,
         category = Category.MISC
 )
 public class LiveScriptingWithLuaV2 extends AbstractScript {

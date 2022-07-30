@@ -34,7 +34,7 @@ public class LiveScript extends ScriptObjHandler {
     public String lines;
 
     public LiveScript() {
-        this.file = new File(System.getProperty("user.dir") + "/LuaScripts/sample.lua");
+        this.file = new File(System.getProperty("user.dir"), "LuaScripts/sample.lua");
         this.globals = LuaEnvironment.getNewGlobals(this);
 
         StringBuilder def = new StringBuilder();
@@ -96,8 +96,8 @@ public class LiveScript extends ScriptObjHandler {
             }
         }
 
-        file.mkdirs();
         if (!file.exists()) {
+            file.mkdirs();
             file.createNewFile();
         }
 
